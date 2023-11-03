@@ -50,6 +50,7 @@ func Authenticate() (string, error) {
 	}
 
 	// polls for the access token
+    // https://pkg.go.dev/golang.org/x/oauth2#Config.DeviceAccessToken
 	token, err := config.DeviceAccessToken(ctx, deviceCode)
 
 	if err != nil {
