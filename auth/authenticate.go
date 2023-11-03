@@ -2,61 +2,40 @@ package auth
 
 import (
 	"fmt"
-	"context"
 
-	"github.com/giuseppe-g-gelardi/git-sessionizer/util"
-
-
-	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/github"
+	c "github.com/giuseppe-g-gelardi/git-sessionizer/config"
 )
 
-const client_id = "532b800d1fd55966f715"
-
-func Authenticate() (string, error) {
-
-	config := oauth2.Config{
-		ClientID: client_id,
-		Scopes:   []string{"repo"},
-		Endpoint: oauth2.Endpoint{
-			AuthURL:       github.Endpoint.AuthURL,
-			TokenURL:      github.Endpoint.TokenURL,
-			DeviceAuthURL: github.Endpoint.DeviceAuthURL,
-		},
-	}
-
-	ctx := context.Background()
-
-	deviceCode, err := config.DeviceAuth(ctx)
+func Authenticate() {
+	cfg, err := c.NewConfigManager().GetConfig(3)
 	if err != nil {
-		fmt.Printf("error getting device code: %v\n", err)
-		return "", err
+		fmt.Println(err)
+		return
 	}
 
-	// fmt.Printf("Go to %v and enter code %v\n", deviceCode.VerificationURI, deviceCode.UserCode)
-	fmt.Println("Press enter to authenticate with GitHub")
-	fmt.Printf("Enter code %v\n", deviceCode.UserCode)
+	if cfg.AccessToken == "" {
+		fmt.Println("No access token found")
 
-	input, err := fmt.Scanln()
-	if input != 0 && err != nil {
-		fmt.Printf("Error reading input: %v\n", err)
-		return "", err
+		token, err := DeviceFlow()
+		if err != nil {
+			fmt.Println("Error authenticating")
+			return
+		}
+		// cfg.AccessToken = `"token": "` + token
+		cfg.AccessToken = token
+		if _, err := c.NewConfigManager().WriteConfig(cfg); err != nil {
+			fmt.Println("Error writing config")
+			return
+		}
+	} else {
+		fmt.Println("Access token found")
 	}
 
-	// opens the browser so the user doesnt have to manually copy url from the terminal and paste it in the browser
-	if err := util.Openbrowser(deviceCode.VerificationURI); err != nil {
-		fmt.Printf("Error opening browser: %s\n", err)
-		return "", err
+	uCfg := cfg
+
+	if _, err := c.NewConfigManager().WriteConfig(uCfg); err != nil {
+		fmt.Println(err)
 	}
 
-	// polls for the access token
-    // https://pkg.go.dev/golang.org/x/oauth2#Config.DeviceAccessToken
-	token, err := config.DeviceAccessToken(ctx, deviceCode)
-
-	if err != nil {
-		fmt.Printf("Error exchanging Device Code for for access token: %v\n", err)
-		return "", err
-	}
-
-	return token.AccessToken, nil
+	fmt.Printf("Config: %+v\n", uCfg)
 }
