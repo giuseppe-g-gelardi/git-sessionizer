@@ -6,11 +6,11 @@ import (
 	c "github.com/giuseppe-g-gelardi/git-sessionizer/config"
 )
 
-func Authenticate() {
+func Authenticate() (bool, error) { // should update this to return a boolean and an error
 	cfg, err := c.NewConfigManager().GetConfig(3)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return false, err
 	}
 
 	if cfg.AccessToken == "" {
@@ -19,13 +19,13 @@ func Authenticate() {
 		token, err := DeviceFlow()
 		if err != nil {
 			fmt.Println("Error authenticating")
-			return
+			return false, err
 		}
 		// cfg.AccessToken = `"token": "` + token
 		cfg.AccessToken = token
 		if _, err := c.NewConfigManager().WriteConfig(cfg); err != nil {
 			fmt.Println("Error writing config")
-			return
+			return false, err
 		}
 	} else {
 		fmt.Println("Access token found")
@@ -38,4 +38,5 @@ func Authenticate() {
 	}
 
 	fmt.Printf("Config: %+v\n", uCfg)
+	return true, nil
 }
