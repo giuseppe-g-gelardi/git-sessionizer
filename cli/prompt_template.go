@@ -12,6 +12,7 @@ type PartialRepo struct {
 	Http_url    string `json:"html_url"`
 	Ssh_url     string `json:"ssh_url"`
 	Description string `json:"description"`
+	Private     bool   `json:"private"`
 }
 
 func RepoPrompt(repos []PartialRepo) {
@@ -25,7 +26,9 @@ func RepoPrompt(repos []PartialRepo) {
 {{ "Name:" | faint }}	{{ .Name }}
 {{ "Description:" | faint }}	{{ .Description }}
 {{ "HTTP URL:" | faint }}	{{ .Http_url }}
-{{ "SSH URL:" | faint }}	{{ .Ssh_url }}`,
+{{ "SSH URL:" | faint }}	{{ .Ssh_url }}
+{{ "Private:" | faint }}	{{ .Private }}
+`,
 	}
 
 	searcher := func(input string, index int) bool {

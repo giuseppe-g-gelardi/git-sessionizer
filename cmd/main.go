@@ -21,6 +21,7 @@ type PartialRepo struct {
 	Http_url    string `json:"html_url"`
 	Ssh_url     string `json:"ssh_url"`
 	Description string `json:"description"`
+    Private     bool   `json:"private"`
 }
 
 var API_URL = "https://api.github.com/user/repos?page={PAGE}&per_page={PER_PAGE}&visibility=all"
