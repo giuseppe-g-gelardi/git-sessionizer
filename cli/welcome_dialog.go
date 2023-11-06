@@ -8,9 +8,15 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
+type WelcomePromptStruct struct {
+	Name        string `json:"name"`
+	Value       string `json:"value"`
+	Description string `json:"description"`
+}
+
 func WelcomeDialog() string {
 	log.Info("Welcome to Git Sessionizer!")
-	Options := []WelcomePromptStruct{
+	welcomeOptions := []WelcomePromptStruct{
 		{
 			Name:        "Open a repo",
 			Value:       "open",
@@ -27,17 +33,6 @@ func WelcomeDialog() string {
 			Description: "Exit the application",
 		},
 	}
-
-	return welcomePrompt(Options)
-}
-
-type WelcomePromptStruct struct {
-	Name        string `json:"name"`
-	Value       string `json:"value"`
-	Description string `json:"description"`
-}
-
-func welcomePrompt(welcomeOptions []WelcomePromptStruct) string {
 	templates := &promptui.SelectTemplates{
 		Label:    "   {{ .Name | faint }}?",
 		Active:   "-> {{ .Name | blue }}",
@@ -46,7 +41,7 @@ func welcomePrompt(welcomeOptions []WelcomePromptStruct) string {
 		Details: `
 ----------- Welcome ------------
 {{ "Description:" | faint }}	{{ .Description }}
-`,
+	`,
 	}
 	searcher := func(input string, index int) bool {
 		option := welcomeOptions[index]
