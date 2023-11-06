@@ -6,13 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	// "strconv"
-	// "strings"
-
 	// "io"
 	"net/http"
-
-	// "net/http"
 
 	// "github.com/giuseppe-g-gelardi/git-sessionizer/auth"
 	"github.com/charmbracelet/log"
@@ -28,11 +23,10 @@ type PartialRepo struct {
 	Description string `json:"description"`
 }
 
-var API = "https://api.github.com/user/repos?page=1&per_page=6&visibility=all"
 var API_URL = "https://api.github.com/user/repos?page={PAGE}&per_page={PER_PAGE}&visibility=all"
 
 func main() {
-	// isAuth, err := auth.Authenticate() // auth.Authenticate()
+	// ! isAuth, err := auth.Authenticate() // auth.Authenticate()
 
 	// get the .configrc rile
 	conf, err := c.NewConfigManager().GetConfig(1)
@@ -41,11 +35,12 @@ func main() {
 	}
 
 	// get all user repos
+    fmt.Println("Fetching all repos...")
 	repos, err := AppendAllRepos(API_URL, conf.AccessToken)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 	}
-	log.Infof("Repos: %v", repos)
+    fmt.Println("Done!")
 
 	// convert repos to cli.PartialRepo and pass to cli.RepoPrompt to display
 	var cliRepos []cli.PartialRepo
