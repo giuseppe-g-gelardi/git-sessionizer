@@ -7,9 +7,9 @@ import (
 
 	"github.com/giuseppe-g-gelardi/git-sessionizer/api"
 
-	"github.com/manifoldco/promptui"
 	"github.com/briandowns/spinner"
 	"github.com/charmbracelet/log"
+	"github.com/manifoldco/promptui"
 )
 
 var API_URL = "https://api.github.com/user/repos?page={PAGE}&per_page={PER_PAGE}&visibility=all"

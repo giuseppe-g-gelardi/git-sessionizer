@@ -41,7 +41,6 @@ func FetchAllUserRepos(url string, token string) ([]PartialRepo, error) {
 		}
 	}
 
-	// fmt.Printf("Fetched %d repositories!\n", len(allRepos))
 	return allRepos, nil
 }
 

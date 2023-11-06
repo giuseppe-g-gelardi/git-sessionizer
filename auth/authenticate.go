@@ -29,7 +29,7 @@ func Authenticate() (bool, error) { // should update this to return a boolean an
 		}
 	} else {
 		// fmt.Println("Access token found")
-        return true, nil
+		return true, nil
 	}
 
 	uCfg := cfg

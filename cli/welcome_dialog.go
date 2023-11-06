@@ -39,8 +39,8 @@ func WelcomeDialog() string {
 		Inactive: "   {{ .Name | cyan }}",
 		Selected: "   {{ .Name | red | cyan }}",
 		Details: `
------------ Welcome ------------
-{{ "Description:" | faint }}	{{ .Description }}
+	----------- Welcome ------------
+	{{ "Description:" | faint }}	{{ .Description }}
 	`,
 	}
 	searcher := func(input string, index int) bool {

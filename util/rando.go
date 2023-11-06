@@ -10,5 +10,3 @@ func Rando(max ...int) int {
 	}
 	return rand.Intn(max[0])
 }
-
-

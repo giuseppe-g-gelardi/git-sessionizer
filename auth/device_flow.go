@@ -32,7 +32,6 @@ func DeviceFlow() (string, error) {
 		return "", err
 	}
 
-	// fmt.Printf("Go to %v and enter code %v\n", deviceCode.VerificationURI, deviceCode.UserCode)
 	fmt.Println("Press enter to authenticate with GitHub")
 	fmt.Printf("Enter code %v\n", deviceCode.UserCode)
 

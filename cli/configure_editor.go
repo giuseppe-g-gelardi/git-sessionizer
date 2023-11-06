@@ -48,9 +48,9 @@ func confirmEditorOptions(editor string, alias bool, tmux bool, cm *conf.ConfigM
 		Inactive: "   {{ .Name | cyan }} ({{ .Description | red }})",
 		Selected: "   {{ .Name | red | cyan }}",
 		Details: `
-	--------- Repository ----------
-	{{ "Name:" | faint }}	{{ .Name }}
-	{{ "Description:" | faint }}	{{ .Description }}
+--------- Repository ----------
+{{ "Name:" | faint }}	{{ .Name }}
+{{ "Description:" | faint }}	{{ .Description }}
 	`,
 	}
 

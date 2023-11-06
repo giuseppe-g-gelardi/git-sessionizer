@@ -8,8 +8,6 @@ import (
 	"github.com/charmbracelet/log"
 )
 
-
-
 func main() {
 	// start the auth flow
 	// currently returns a boolean (isAuth true/false) and an error
