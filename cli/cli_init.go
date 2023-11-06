@@ -2,20 +2,29 @@ package cli
 
 import (
 	"fmt"
+    "time"
 
-	"github.com/charmbracelet/log"
 	"github.com/giuseppe-g-gelardi/git-sessionizer/api"
+
+    "github.com/charmbracelet/log"
+    "github.com/briandowns/spinner"
+
 )
 
 var API_URL = "https://api.github.com/user/repos?page={PAGE}&per_page={PER_PAGE}&visibility=all"
 
 func InitCli(token string) {
+    s := spinner.New(spinner.CharSets[14], 100*time.Millisecond) // Build our new spinner])
+    s.Start() // Start the spinner
+    s.Suffix = " Fetching all repos..."
+    s.Color("blue")
 	// get all user repos
-	fmt.Println("Fetching all repos...")
+	// fmt.Println("Fetching all repos...")
 	repos, err := api.FetchAllUserRepos(API_URL, token)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 	}
+    s.Stop() // Stop the spinner
 	fmt.Println("Done!")
 
 	// convert repos to cli.PartialRepo and pass to cli.RepoPrompt to display

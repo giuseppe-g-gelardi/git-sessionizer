@@ -37,6 +37,6 @@ func Authenticate() (bool, error) { // should update this to return a boolean an
 		fmt.Println(err)
 	}
 
-	fmt.Printf("Config: %+v\n", uCfg)
+	// fmt.Printf("Config: %+v\n", uCfg)
 	return true, nil
 }
