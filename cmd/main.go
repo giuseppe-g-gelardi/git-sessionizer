@@ -9,6 +9,8 @@ import (
     "github.com/charmbracelet/log"
 )
 
+var API_URL = "https://api.github.com/user/repos?page={PAGE}&per_page={PER_PAGE}&visibility=all"
+
 func main() {
     // start the auth flow
     // currently returns a boolean (isAuth true/false) and an error 
@@ -25,7 +27,7 @@ func main() {
 	}
 
     // should start the cli prompts
-	cli.InitCli(conf.AccessToken)
+	cli.InitCli(conf.AccessToken, API_URL)
 }
 
 // ! ===================================================================== ! //
