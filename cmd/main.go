@@ -16,9 +16,8 @@ func main() {
 		log.Errorf("Error: %v", err)
 	}
 
-	cm := c.NewConfigManager()
-
 	// instantiate the config manager and get the .configrc file
+	cm := c.NewConfigManager()
 	// currently returns a pointer to a UserConfig struct and an error
 	conf, err := cm.GetConfig(1)
 	if err != nil {
@@ -26,7 +25,7 @@ func main() {
 	}
 
 	// should start the cli prompts
-	cli.InitCli(conf.AccessToken, cm)
+	cli.InitCli(conf, cm)
 }
 
 // ! ===================================================================== ! //

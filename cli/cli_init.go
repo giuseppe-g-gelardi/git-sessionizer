@@ -5,13 +5,13 @@ import (
 	u "github.com/giuseppe-g-gelardi/git-sessionizer/util"
 )
 
-func InitCli(token string, cm *conf.ConfigManager) {
-	// clear the console first? // conf should be the configManager?
+func InitCli(config *conf.UserConfig, cm *conf.ConfigManager) {
+	// clear the console first?
 	welcome := WelcomeDialog()
 
 	switch welcome {
 	case "open":
-		RepoSelection(token /* conf */)
+		RepoSelection(config.AccessToken)
 	case "update":
 		ConfigureEditor(cm)
 	case "exit":

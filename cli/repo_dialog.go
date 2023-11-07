@@ -44,8 +44,8 @@ func RepoSelection(token string) {
 func repoPrompt(repos []PartialRepo) {
 	templates := &promptui.SelectTemplates{
 		Label:    "   {{ .Name | faint }}?",
-		Active:   "-> {{ .Name | blue }} ({{ .Description | red }})",
-		Inactive: "   {{ .Name | cyan }} ({{ .Description | red }})",
+		Active:   "-> {{ .Name | blue }}",
+		Inactive: "   {{ .Name | cyan }}",
 		Selected: "   {{ .Name | red | cyan }}",
 		Details: `
 --------- Repository ----------

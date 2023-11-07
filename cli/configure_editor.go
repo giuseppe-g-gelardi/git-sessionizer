@@ -18,11 +18,15 @@ type DialogOption struct {
 func ConfigureEditor(cm *conf.ConfigManager) {
 	// something like this:
 	editor_answer := "nvim" // := ConfigureEditorOptions()
-	alias_answer := false   //:= ConfigureAliasOptions()
+	alias_answer := false   // := ConfigureAliasOptions()
 	tmux_answer := true     // := ConfigureTmuxOptions()
 
 	fmt.Println("this is the confirmation dialog?")
 	// should just use the config or bring in the config manager
+    // cfg, _ := cm.GetConfig(1)
+    // cfg.Tmux = tmux_answer
+    // uCfg, _ := cm.WriteConfig(cfg)
+    // fmt.Printf("Updated Config: %v", uCfg)
 
 	confirmEditorOptions(editor_answer, alias_answer, tmux_answer, cm)
 }
@@ -78,16 +82,18 @@ func confirmEditorOptions(editor string, alias bool, tmux bool, cm *conf.ConfigM
 	}
 
 	if !editorOptions[i].Value {
-		fmt.Println("this *SHOULD* bring you back to the config editor")
+		ConfigureEditor(cm)
 	}
 
-	cfgCurr, err := cm.GetConfig(1)
+	// cfgCurr, err := cm.GetConfig(1)
+	// fmt.Printf("Current Config: %v", cfgCurr)
+    
+	cfg, err := cm.GetConfig(1)
 	if err != nil {
 		fmt.Printf("Error getting config: %v", err)
 	}
-	fmt.Printf("Current Config: %v", cfgCurr)
-
+    
 	// this should bring you back to the initCli function
 	fmt.Printf("You choose number %d: %s\n", i+1, editorOptions[i].Name)
-	// InitCli("", &conf.UserConfig{})
+	InitCli(cfg, cm)
 }
