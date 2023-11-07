@@ -17,22 +17,24 @@ type DialogOption struct {
 
 func ConfigureEditor(cm *conf.ConfigManager) {
 	// something like this:
-	editor_answer := "nvim" // := ConfigureEditorOptions()
-	alias_answer := false   // := ConfigureAliasOptions()
-	tmux_answer := true     // := ConfigureTmuxOptions()
+	editor_answer := "nvim"               // := ConfigureEditorOptions()
+	alias_answer := false                 // := ConfigureAliasOptions()
+	tmux_answer := ConfigureTmuxOptions() // := ConfigureTmuxOptions()
 
-	fmt.Println("this is the confirmation dialog?")
 	// should just use the config or bring in the config manager
-    // cfg, _ := cm.GetConfig(1)
-    // cfg.Tmux = tmux_answer
-    // uCfg, _ := cm.WriteConfig(cfg)
-    // fmt.Printf("Updated Config: %v", uCfg)
+	// cfg, _ := cm.GetConfig(1)
+	// cfg.Tmux = tmux_answer
+	// uCfg, _ := cm.WriteConfig(cfg)
+	// fmt.Printf("Updated Config: %v", uCfg)
 
 	confirmEditorOptions(editor_answer, alias_answer, tmux_answer, cm)
 }
 
 func confirmEditorOptions(editor string, alias bool, tmux bool, cm *conf.ConfigManager) {
-	fmt.Printf("Confirm Editor Options %v %v %v", editor, alias, tmux)
+	// fmt.Println("Confirm Editor Options: ")
+	// fmt.Printf("Editor: %v", editor)
+	// fmt.Printf("Alias: %v", alias)
+	// fmt.Printf("Tmux: %v", tmux)
 	editorOptions := []DialogOption{
 		{
 			Name:        "LGTM!",
@@ -48,8 +50,8 @@ func confirmEditorOptions(editor string, alias bool, tmux bool, cm *conf.ConfigM
 	// editorPrompt(Options)
 	templates := &promptui.SelectTemplates{
 		Label:    "   {{ .Name | faint }}?",
-		Active:   "-> {{ .Name | blue }} ({{ .Description | red }})",
-		Inactive: "   {{ .Name | cyan }} ({{ .Description | red }})",
+		Active:   "-> {{ .Name | blue }}",
+		Inactive: "   {{ .Name | cyan }}",
 		Selected: "   {{ .Name | red | cyan }}",
 		Details: `
 --------- Repository ----------
@@ -57,7 +59,6 @@ func confirmEditorOptions(editor string, alias bool, tmux bool, cm *conf.ConfigM
 {{ "Description:" | faint }}	{{ .Description }}
 	`,
 	}
-
 	searcher := func(input string, index int) bool {
 		repo := editorOptions[index]
 		name := strings.Replace(strings.ToLower(repo.Name), " ", "", -1)
@@ -66,8 +67,13 @@ func confirmEditorOptions(editor string, alias bool, tmux bool, cm *conf.ConfigM
 		return strings.Contains(name, input)
 	}
 
+	fmt.Println("Confirm Editor Options: ")
+	fmt.Println("Editor: ", editor)
+	fmt.Println("Alias: ", alias)
+	fmt.Println("Tmux: ", tmux)
+
 	prompt := promptui.Select{
-		Label:     "Select a repository",
+		Label:     "Confirm Editor Options",
 		Items:     editorOptions,
 		Templates: templates,
 		Size:      4,
@@ -87,12 +93,12 @@ func confirmEditorOptions(editor string, alias bool, tmux bool, cm *conf.ConfigM
 
 	// cfgCurr, err := cm.GetConfig(1)
 	// fmt.Printf("Current Config: %v", cfgCurr)
-    
+
 	cfg, err := cm.GetConfig(1)
 	if err != nil {
 		fmt.Printf("Error getting config: %v", err)
 	}
-    
+
 	// this should bring you back to the initCli function
 	fmt.Printf("You choose number %d: %s\n", i+1, editorOptions[i].Name)
 	InitCli(cfg, cm)
