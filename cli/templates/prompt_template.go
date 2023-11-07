@@ -35,7 +35,6 @@ func RenderPrompt(label string, options []DialogOption, maxOptions int) interfac
 {{ "Description:" | faint }}	{{ .Description }}
 `, RenderTitle(label, 80)),
 	}
-
 	searcher := func(input string, index int) bool {
 		option := options[index]
 		name := strings.Replace(strings.ToLower(option.Name), " ", "", -1)
