@@ -27,7 +27,7 @@ func RepoSelection(token string) {
 	s.Start()                                                    // Start the spinner
 	s.Suffix = " Fetching all repos..."
 	s.Color("cyan")
-	repos, err := api.FetchAllUserRepos(API_URL, token)
+	repos, err := api.RepoList(API_URL, token)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 	}

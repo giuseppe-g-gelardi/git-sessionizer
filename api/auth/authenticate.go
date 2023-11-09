@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	c "github.com/giuseppe-g-gelardi/git-sessionizer/config"
 	"github.com/giuseppe-g-gelardi/git-sessionizer/util"
 
 	"golang.org/x/oauth2"
@@ -12,7 +13,35 @@ import (
 
 const client_id = "532b800d1fd55966f715"
 
-func DeviceFlow() (string, error) {
+func Authenticate(cfg *c.Config, cm *c.CfgManager) error {
+
+	if cfg.AccessToken == "" {
+		fmt.Println("No access token found")
+
+		token, err := deviceFlow()
+		if err != nil {
+			fmt.Println("Error authenticating")
+			return err
+		}
+		cfg.AccessToken = token
+		if _, err := cm.WriteConfig(cfg); err != nil {
+			fmt.Println("Error writing config")
+			return err
+		}
+	} else {
+		return nil
+	}
+
+	uCfg := cfg
+
+	if _, err := cm.WriteConfig(uCfg); err != nil {
+		fmt.Println(err)
+	}
+
+	return nil
+}
+
+func deviceFlow() (string, error) {
 
 	config := oauth2.Config{
 		ClientID: client_id,

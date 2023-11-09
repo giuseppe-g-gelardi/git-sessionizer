@@ -16,7 +16,7 @@ type PartialRepo struct {
 	Private     bool   `json:"private"`
 }
 
-func FetchAllUserRepos(url string, token string) ([]PartialRepo, error) {
+func RepoList(url string, token string) ([]PartialRepo, error) {
 	perPage := 100
 	page := 1
 	allRepos := []PartialRepo{}

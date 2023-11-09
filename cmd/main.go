@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/giuseppe-g-gelardi/git-sessionizer/auth"
+	"github.com/giuseppe-g-gelardi/git-sessionizer/api/auth"
 	"github.com/giuseppe-g-gelardi/git-sessionizer/cli"
 	c "github.com/giuseppe-g-gelardi/git-sessionizer/config"
 
