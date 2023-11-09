@@ -14,13 +14,9 @@ the application uses github authentication and some interactive prompts to...
  - and finally, open the repo in your preferred editor (vscode, vim, or neovim)
 
 TODO: 
-- [ ] add filtering to repo search
-- [ ] make back button
-- [ ] if there is error cloning a repo, try again. but only like 3 times 
-- [ ] add ssh_url to gitClone options -- need to setup ssh keys to test with but it should work
-- [ ] add functionality for worktrees "'--bare' repos" 
-- [x] open browser based on OS -- process.platform === 'darwin' || 'linux' || 'win32'
-- [x] implement device flow auth
+- [ ] get caught up to `../ts-git-sessionizer`
+- [ ] explore using .yml for the config file
+- [ ] bubbletea instead of promptui? like the idea of a TUI.
 
 ## To get started:
 1. `git clone https://github.com/giuseppe-g-gelardi/git-sessionizer.git`
@@ -28,6 +24,3 @@ TODO:
 3. go mod tidy ...?
 4. go run ./cmd
 
-
-## eventually..
-build into a binary to install.
