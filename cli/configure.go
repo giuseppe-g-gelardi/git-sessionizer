@@ -10,9 +10,9 @@ import (
 
 func ConfigureEditor(cm *conf.CfgManager) {
 
-	editor_answer := "nvim"                   // := ConfigureEditorOptions()
-	alias_answer := p.ConfigureAliasOptions() // := ConfigureAliasOptions()
-	tmux_answer := p.ConfigureTmuxOptions()   // := ConfigureTmuxOptions()
+	editor_answer := p.ConfigureEditorOptions()
+	alias_answer := p.ConfigureAliasOptions()
+	tmux_answer := p.ConfigureTmuxOptions()
 
 	// ! update the following to return an answer as a bool
 	/* conf_answer := */
