@@ -80,6 +80,6 @@ func repoPrompt(repos []PartialRepo) {
 		return
 	}
 
-	fmt.Printf("You choose number %d: %s\n", i+1, repos[i].Name)
+	fmt.Printf("You chose repo %d: %s\n", i+1, repos[i].Name)
 	// return // repos[i].Name
 }

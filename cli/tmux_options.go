@@ -27,5 +27,5 @@ func ConfigureTmuxOptions() bool {
 		},
 	}
 
-	return templates.RenderPrompt("Confirm Tmux Options", tmuxOptions, 4).(bool)
+	return templates.RenderSelect("Confirm Tmux Options", tmuxOptions, 4).(bool)
 }

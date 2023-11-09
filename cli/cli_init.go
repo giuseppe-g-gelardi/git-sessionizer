@@ -6,15 +6,18 @@ import (
 )
 
 func InitCli(config *conf.UserConfig, cm *conf.ConfigManager) {
-	// clear the console first?
+	// clear the consone when this function gets called/reacalled
+	u.Clear()
+	// display the welcome dialog options
 	welcome := WelcomeDialog()
 
+	// switch on the welcome dialog options:
 	switch welcome {
-	case "open":
+	case "open": // open a repo,
 		RepoSelection(config.AccessToken)
-	case "update":
+	case "update": // update the editor config,
 		ConfigureEditor(cm)
-	case "exit":
+	case "exit": // or exit the program
 		u.Exit()
 	}
 }

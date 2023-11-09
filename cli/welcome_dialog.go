@@ -27,5 +27,5 @@ func WelcomeDialog() string {
 		},
 	}
 
-	return templates.RenderPrompt("Welcome to Git Sessionizer!", welcomeOptions, 4).(string)
+	return templates.RenderSelect("Welcome to Git Sessionizer!", welcomeOptions, 4).(string)
 }

@@ -9,9 +9,9 @@ import (
 
 func ConfigureEditor(cm *conf.ConfigManager) {
 
-	editor_answer := "nvim"               // := ConfigureEditorOptions()
-	alias_answer := ConfigureAliasOptions()                 // := ConfigureAliasOptions()
-	tmux_answer := ConfigureTmuxOptions() // := ConfigureTmuxOptions()
+	editor_answer := "nvim"                 // := ConfigureEditorOptions()
+	alias_answer := ConfigureAliasOptions() // := ConfigureAliasOptions()
+	tmux_answer := ConfigureTmuxOptions()   // := ConfigureTmuxOptions()
 
 	confirmEditorOptions(editor_answer, alias_answer, tmux_answer, cm)
 }
@@ -28,8 +28,8 @@ func confirmEditorOptions(editor string, alias string, tmux bool, cm *conf.Confi
 
 	editorOptions := []templates.DialogOption{
 		{
-			Name:  "Yes!",
-			Value: true,
+			Name:        "Yes!",
+			Value:       true,
 			Description: "I'm happy with these options",
 		},
 		{
@@ -38,7 +38,7 @@ func confirmEditorOptions(editor string, alias string, tmux bool, cm *conf.Confi
 			Description: "I'd like to update my config",
 		},
 	}
-	answer := templates.RenderPrompt("Confirm Editor Config Options", editorOptions, 4)
+	answer := templates.RenderSelect("Confirm Editor Config Options", editorOptions, 4)
 	if !answer.(bool) {
 		ConfigureEditor(cm)
 	}
