@@ -19,4 +19,5 @@
 go.work
 
 .configrc
+config.yaml
 .vscode
