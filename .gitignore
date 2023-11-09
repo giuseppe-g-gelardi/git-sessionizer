@@ -19,6 +19,7 @@
 go.work
 
 .configrc
-config.yaml
 .vscode
 .deprecated
+config.yaml
+NOTES.md
