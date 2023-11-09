@@ -7,7 +7,7 @@ import (
 	conf "github.com/giuseppe-g-gelardi/git-sessionizer/config"
 )
 
-func ConfigureEditor(cm *conf.ConfigManager) {
+func ConfigureEditor(cm *conf.CfgManager) {
 
 	editor_answer := "nvim"                 // := ConfigureEditorOptions()
 	alias_answer := ConfigureAliasOptions() // := ConfigureAliasOptions()
@@ -16,7 +16,7 @@ func ConfigureEditor(cm *conf.ConfigManager) {
 	confirmEditorOptions(editor_answer, alias_answer, tmux_answer, cm)
 }
 
-func confirmEditorOptions(editor string, alias string, tmux bool, cm *conf.ConfigManager) {
+func confirmEditorOptions(editor string, alias string, tmux bool, cm *conf.CfgManager) {
 	fmt.Println("Your config options are:")
 	fmt.Printf("Editor: %s\n", editor)
 	if tmux {

@@ -5,7 +5,7 @@ import (
 	u "github.com/giuseppe-g-gelardi/git-sessionizer/util"
 )
 
-func InitCli(config *conf.UserConfig, cm *conf.ConfigManager) {
+func InitCli(config *conf.Config, cm *conf.CfgManager) {
 	// clear the consone when this function gets called/reacalled
 	u.Clear()
 	// display the welcome dialog options

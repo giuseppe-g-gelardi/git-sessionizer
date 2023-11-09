@@ -1,47 +1,36 @@
 package main
 
 import (
-	"fmt"
-
-	// "github.com/giuseppe-g-gelardi/git-sessionizer/auth"
-	// "github.com/giuseppe-g-gelardi/git-sessionizer/cli"
+	"github.com/giuseppe-g-gelardi/git-sessionizer/auth"
+	"github.com/giuseppe-g-gelardi/git-sessionizer/cli"
 	c "github.com/giuseppe-g-gelardi/git-sessionizer/config"
 
-	// "github.com/charmbracelet/log"
+	"github.com/charmbracelet/log"
 )
 
 func main() {
-
+	// instantiate the config manager that gets passed around the app
 	cm := c.NewCfgManager()
+	// currently returns a pointer to a UserConfig struct and an error
 	conf, err := cm.GetConfig(1)
 	if err != nil {
-		fmt.Println(err)
+		log.Errorf("Error: %v", err)
 	}
-	fmt.Printf("%+v\n", conf)
+
+	// check if the access token is empty
+	if conf.AccessToken == "" {
+		// if the access token is empty, start the auth flow
+		err := auth.Authenticate(conf, cm) // this returns a boolean (isAuth true/false) and an error. should probably remove the bool
+		if err != nil {
+			log.Errorf("Error: %v", err)
+		}
+	} else {
+		// if the access token is not empty, start the cli
+		cli.InitCli(conf, cm)
+	}
 }
 
 // ! ===================================================================== ! //
 // ! ===================================================================== ! //
 // ! ===================================================================== ! //
 // ! ===================================================================== ! //
-
-
-// func main() {
-// 	// start the auth flow
-// 	// currently returns a boolean (isAuth true/false) and an error
-// 	_, err := auth.Authenticate() // auth.Authenticate()
-// 	if err != nil {
-// 		log.Errorf("Error: %v", err)
-// 	}
-
-// 	// instantiate the config manager and get the .configrc file
-// 	cm := c.NewConfigManager()
-// 	// currently returns a pointer to a UserConfig struct and an error
-// 	conf, err := cm.GetConfig(1)
-// 	if err != nil {
-// 		log.Errorf("Error: %v", err)
-// 	}
-
-// 	// should start the cli prompts
-// 	cli.InitCli(conf, cm)
-// }	
