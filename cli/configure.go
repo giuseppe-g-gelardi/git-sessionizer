@@ -15,6 +15,16 @@ func ConfigureEditor(cm *conf.CfgManager) {
 	if !conf_answer {
 		ConfigureEditor(cm)
 	}
-	conf, _ := cm.GetConfig(2)
-	InitCli(conf, cm)
+	cfg, _ := cm.GetConfig(2)
+
+	uCfg := &conf.Config{
+		AccessToken: cfg.AccessToken,
+		Editor:      editor_answer,
+		Alias:       alias_answer,
+		Tmux:        tmux_answer,
+	}
+
+	cm.WriteConfig(uCfg)
+
+	InitCli(uCfg, cm)
 }

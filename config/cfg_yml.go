@@ -8,19 +8,19 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type EditorCfg string
+// type EditorCfg string
 
-const (
-	vsCode EditorCfg = "vscode"
-	vim    EditorCfg = "vim"
-	neovim EditorCfg = "nvim"
-)
+// const (
+// 	vsCode EditorCfg = "vscode"
+// 	vim    EditorCfg = "vim"
+// 	neovim EditorCfg = "nvim"
+// )
 
 type Config struct {
-	AccessToken string    `json:"access_token" yaml:"access_token"`
-	Editor      EditorCfg `json:"editor" yaml:"editor"`
-	Alias       string    `json:"alias" yaml:"alias"`
-	Tmux        bool      `json:"tmux" yaml:"tmux"`
+	AccessToken string `json:"access_token" yaml:"access_token"`
+	Editor      string `json:"editor" yaml:"editor"`
+	Alias       string `json:"alias" yaml:"alias"`
+	Tmux        bool   `json:"tmux" yaml:"tmux"`
 }
 
 type CfgManager struct {
@@ -33,7 +33,7 @@ func NewCfgManager() *CfgManager {
 		ConfigFileName: "config.yaml",
 		DefaultConfig: Config{
 			AccessToken: "",
-			Editor:      vsCode,
+			Editor:      "vscode",
 			Alias:       "",
 			Tmux:        false,
 		},
