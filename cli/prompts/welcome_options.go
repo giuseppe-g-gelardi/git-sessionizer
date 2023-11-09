@@ -1,4 +1,4 @@
-package cli
+package prompts
 
 import "github.com/giuseppe-g-gelardi/git-sessionizer/cli/templates"
 

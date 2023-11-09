@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/giuseppe-g-gelardi/git-sessionizer/api/auth"
 	"github.com/giuseppe-g-gelardi/git-sessionizer/cli"
 	c "github.com/giuseppe-g-gelardi/git-sessionizer/config"
@@ -25,9 +27,10 @@ func main() {
 			log.Errorf("Error: %v", err)
 		}
 	} else {
-		// if the access token is not empty, start the cli
-		cli.InitCli(conf, cm)
+		fmt.Println("You are already authenticated!")
 	}
+	// if the access token is not empty, start the cli
+	cli.InitCli(conf, cm)
 }
 
 // ! ===================================================================== ! //
