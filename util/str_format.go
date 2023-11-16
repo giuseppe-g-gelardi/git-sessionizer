@@ -14,9 +14,9 @@ example: .github.reponame -> _github_reponame
 func StrFormat(input string) string {
     var output string
     if strings.Contains(input, ".") {
-        output = strings.Replace(input, ".", "_", -1)
+        output =  strings.Replace(input, ".", "_", -1)
 
     }
 
-    return output
+    return strings.ToLower(output)
 }

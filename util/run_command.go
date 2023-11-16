@@ -7,6 +7,7 @@ import (
 )
 
 func RunCommand(command []string) error {
+// func RunCommand(command ...string) error {
     fmt.Printf(command[0], command[1:])
 
 
