@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/giuseppe-g-gelardi/git-sessionizer/api"
@@ -29,5 +30,7 @@ func RepoSelection(token string) {
 	for _, repo := range repos {
 		cliRepos = append(cliRepos, p.PartialRepo(repo))
 	}
-	p.RepoPrompt(cliRepos)
+    repo, _ := p.RepoPrompt(cliRepos)
+
+    fmt.Printf("INREPOSELECTIONYou chose repo %v\n", repo)
 }

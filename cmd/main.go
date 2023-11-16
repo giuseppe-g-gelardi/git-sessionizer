@@ -19,7 +19,6 @@ func main() {
 		log.Errorf("Error: %v", err)
 	}
 
-
 	// check if the access token is empty
 	if conf.AccessToken == "" {
 		// if the access token is empty, start the auth flow
