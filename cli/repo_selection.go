@@ -13,7 +13,6 @@ import (
 
 var API_URL = "https://api.github.com/user/repos?page={PAGE}&per_page={PER_PAGE}&visibility=all"
 
-
 func RepoSelection(token string) {
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond) // Build our new spinner])
 	s.Start()                                                    // Start the spinner
@@ -30,7 +29,24 @@ func RepoSelection(token string) {
 	for _, repo := range repos {
 		cliRepos = append(cliRepos, p.PartialRepo(repo))
 	}
-    repo, _ := p.RepoPrompt(cliRepos)
+	repo, _ := p.RepoPrompt(cliRepos)
 
-    fmt.Printf("INREPOSELECTIONYou chose repo %v\n", repo)
+	htmlorssh := p.HtmlOrSsh()
+
+	if htmlorssh == "https" {
+		fmt.Printf("You chose HTTPS\n")
+		fmt.Printf("CLONEURL %v\n", repo.Http_url)
+	} else if htmlorssh == "ssh" {
+		fmt.Printf("You chose SSH\n")
+		fmt.Printf("CLONEURL %v\n", repo.Ssh_url)
+	}
+
+	/*
+	   clone repo (via https or ssh)
+	   cd into (repo.Name)
+       
+       compile and run list of commands {
+           tmux, editor, alias, etc.
+       }
+	*/
 }
