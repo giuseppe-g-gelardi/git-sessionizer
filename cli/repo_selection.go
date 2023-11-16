@@ -57,6 +57,23 @@ func RepoSelection(config *c.Config) {
 		       }
 	*/
 
+	// // open editor logic:
+	/*
+	   var editorCmd string
+	   if config.Alias != "" {
+	       editorCmd = config.Alias
+	   }
+	   editorCmd = config.Editor
+	*/
+
+	/*
+			   list of commands: [
+		       clone: ["git", "clone", repoUrl],
+		       cdDir: ["cd", repo.Name],
+		       code: [config.Editor, "."],
+			   ]
+	*/
+
 	cmdErr := u.RunCommand([]string{"git", "clone", repoUrl})
 	if cmdErr != nil {
 		log.Errorf("Error cloning repo: %v", cmdErr)
@@ -65,6 +82,11 @@ func RepoSelection(config *c.Config) {
 	if cdErr != nil {
 		log.Errorf("Error changing directory: %v", cdErr)
 	}
+    fmtStr := u.StrFormat(repo.Name)
+    tmuxErr := u.RunCommand([]string{"tmux", "new-session", "-s", fmtStr})
+    if tmuxErr != nil {
+        log.Errorf("Error creating tmux session: %v", tmuxErr)
+    }
 	editorErr := u.RunCommand([]string{config.Editor, "."})
 	if editorErr != nil {
 		log.Errorf("Error opening editor: %v", editorErr)
