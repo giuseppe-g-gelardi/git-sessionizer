@@ -20,3 +20,4 @@ func OpenEditor(editor string) error {
 
 	return nil
 }
+

@@ -6,6 +6,8 @@ import (
 
 	"github.com/giuseppe-g-gelardi/git-sessionizer/api"
 	p "github.com/giuseppe-g-gelardi/git-sessionizer/cli/prompts"
+	c "github.com/giuseppe-g-gelardi/git-sessionizer/config"
+	u "github.com/giuseppe-g-gelardi/git-sessionizer/util"
 
 	"github.com/briandowns/spinner"
 	"github.com/charmbracelet/log"
@@ -13,12 +15,15 @@ import (
 
 var API_URL = "https://api.github.com/user/repos?page={PAGE}&per_page={PER_PAGE}&visibility=all"
 
-func RepoSelection(token string) {
+func RepoSelection(config *c.Config) {
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond) // Build our new spinner])
 	s.Start()                                                    // Start the spinner
 	s.Suffix = " Fetching all repos..."
 	s.Color("cyan")
-	repos, err := api.RepoList(API_URL, token)
+
+	var repoUrl string
+
+	repos, err := api.RepoList(API_URL, config.AccessToken)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 	}
@@ -36,17 +41,37 @@ func RepoSelection(token string) {
 	if htmlorssh == "https" {
 		fmt.Printf("You chose HTTPS\n")
 		fmt.Printf("CLONEURL %v\n", repo.Http_url)
+		repoUrl = repo.Http_url
 	} else if htmlorssh == "ssh" {
 		fmt.Printf("You chose SSH\n")
 		fmt.Printf("CLONEURL %v\n", repo.Ssh_url)
+		repoUrl = repo.Ssh_url
 	}
 
 	/*
-	   clone repo (via https or ssh)
-	   cd into (repo.Name)
-       
-       compile and run list of commands {
-           tmux, editor, alias, etc.
-       }
+			   clone repo (via https or ssh)
+			   cd into (repo.Name)
+
+		       compile and run list of commands {
+		           tmux, editor, alias, etc.
+		       }
 	*/
+
+	cmdErr := u.RunCommand([]string{"git", "clone", repoUrl})
+	if cmdErr != nil {
+		log.Errorf("Error cloning repo: %v", cmdErr)
+	}
+	cdErr := u.ChangeDir(repo.Name)
+	if cdErr != nil {
+		log.Errorf("Error changing directory: %v", cdErr)
+	}
+	editorErr := u.RunCommand([]string{config.Editor, "."})
+	if editorErr != nil {
+		log.Errorf("Error opening editor: %v", editorErr)
+	}
+
+	/*
+	  THIS IS SO MUCH EASIER IN GO
+	*/
+
 }
