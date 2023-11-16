@@ -74,8 +74,8 @@ func RepoSelection(config *c.Config) {
 			   ]
 	*/
 
-	// cmdErr := u.RunCommand([]string{"git", "clone", repoUrl})
-    cmdErr := u.RunCommand("git", "clone", string(repoUrl))
+	cmdErr := u.RunCommand([]string{"git", "clone", repoUrl})
+	// cmdErr := u.RunCommand("git", "clone", string(repoUrl))
 	if cmdErr != nil {
 		log.Errorf("Error cloning repo: %v", cmdErr)
 	}
@@ -83,20 +83,24 @@ func RepoSelection(config *c.Config) {
 	if cdErr != nil {
 		log.Errorf("Error changing directory: %v", cdErr)
 	}
-    // fmtStr := u.StrFormat(repo.Name)
-    // fmt.Printf("fmtStr: %v\n", fmtStr)
+	// fmtStr := u.StrFormat(repo.Name)
+	// fmt.Printf("fmtStr: %v\n", fmtStr)
 
-
-    tmuxErr := u.RunCommand([]string{"tmux", "new", "-S", repo.Name})
-    if tmuxErr != nil {
-        log.Errorf("Error creating tmux session: %v", tmuxErr)
-    }
-    /*
-	editorErr := u.RunCommand([]string{config.Editor, "."})
-	if editorErr != nil {
-		log.Errorf("Error opening editor: %v", editorErr)
+	// tmuxErr := u.RunCommand([]string{"tmux", "new", "-S", repo.Name})
+	tmuxErr := u.RunCommand([]string{"tmux"})
+	if tmuxErr != nil {
+		log.Errorf("Error creating tmux session: %v", tmuxErr)
 	}
-*/
+
+	/*
+		perhaps the command to open the editor needs to be run in the same shell as the tmux sessions
+		take notes from the ts impl
+	*/
+
+	// editorErr := u.RunCommand([]string{config.Editor, "."})
+	// if editorErr != nil {
+	// 	log.Errorf("Error opening editor: %v", editorErr)
+	// }
 
 	/*
 	  THIS IS SO MUCH EASIER IN GO
