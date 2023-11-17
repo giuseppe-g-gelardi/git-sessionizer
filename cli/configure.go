@@ -6,10 +6,18 @@ import (
 )
 
 func ConfigureEditor(cm *conf.CfgManager) {
+	var editor_answer string
+	var alias_answer string
+	var tmux_answer bool
 
-	editor_answer := p.ConfigureEditorOptions()
-	alias_answer := p.ConfigureAliasOptions()
-	tmux_answer := p.ConfigureTmuxOptions()
+	editor_answer = p.ConfigureEditorOptions()
+	alias_answer = p.ConfigureAliasOptions()
+
+	if editor_answer != "vscode" {
+		tmux_answer = p.ConfigureTmuxOptions()
+	} else {
+		tmux_answer = false
+	}
 
 	conf_answer := p.ConfirmConfigurationOptions(editor_answer, alias_answer, tmux_answer, cm)
 	if !conf_answer {
