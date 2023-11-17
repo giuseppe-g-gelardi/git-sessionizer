@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/giuseppe-g-gelardi/git-sessionizer/api"
@@ -13,6 +12,8 @@ import (
 	"github.com/charmbracelet/log"
 )
 
+var API_URL = "https://api.github.com/user/repos?page={PAGE}&per_page={PER_PAGE}&visibility=all"
+
 func setEditorCommand(config *c.Config) string {
 	if config.Alias != "" {
 		return config.Alias
@@ -20,7 +21,16 @@ func setEditorCommand(config *c.Config) string {
 	return config.Editor
 }
 
-var API_URL = "https://api.github.com/user/repos?page={PAGE}&per_page={PER_PAGE}&visibility=all"
+func setRepoUrl(repo p.PartialRepo) string {
+
+	htmlorssh := p.HtmlOrSsh()
+
+	if htmlorssh == "ssh" {
+		return repo.Ssh_url
+	}
+	return repo.Http_url
+
+}
 
 func RepoSelection(config *c.Config) {
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond) // Build our new spinner])
@@ -28,7 +38,7 @@ func RepoSelection(config *c.Config) {
 	s.Suffix = " Fetching all repos..."
 	s.Color("cyan")
 
-	var repoUrl string
+	// var repoUrl string
 	editorCmd := setEditorCommand(config)
 
 	repos, err := api.RepoList(API_URL, config.AccessToken)
@@ -44,18 +54,11 @@ func RepoSelection(config *c.Config) {
 	}
 	repo, _ := p.RepoPrompt(cliRepos)
 
-	htmlorssh := p.HtmlOrSsh()
+	startSession(repo, config, editorCmd)
+}
 
-	if htmlorssh == "https" {
-		fmt.Printf("You chose HTTPS\n")
-		fmt.Printf("CLONEURL %v\n", repo.Http_url)
-		repoUrl = repo.Http_url
-	} else if htmlorssh == "ssh" {
-		fmt.Printf("You chose SSH\n")
-		fmt.Printf("CLONEURL %v\n", repo.Ssh_url)
-		repoUrl = repo.Ssh_url
-	}
-
+func startSession(repo p.PartialRepo, config *c.Config, editorCmd string) {
+	repoUrl := setRepoUrl(repo)
 	cmdErr := u.RunCommand([]string{"git", "clone", repoUrl})
 	if cmdErr != nil {
 		log.Errorf("Error cloning repo: %v", cmdErr)
@@ -71,19 +74,43 @@ func RepoSelection(config *c.Config) {
 		}
 	}
 	if config.Editor == "vscode" {
-        cmd := []string{"code", "."}
+		cmd := []string{"code", "."}
 		if editorErr := u.RunCommand(cmd); editorErr != nil {
 			log.Errorf("Error opening editor: %v", editorErr)
 		}
-	} 
-
-	// the editor also needs to be passed in.
-	// if the editor is NOT vim/nvim, just RunCommand([]string{"code", "."}) or whatever
-	// if tmxErr := u.StartTmuxSession(repo.Name, editorCmd); tmxErr != nil { // config.Editor
-	// 	log.Errorf("Error starting tmux session: %v", tmxErr)
-	// }
-	// editorErr := u.RunCommand([]string{config.Editor, "."})
-	// if editorErr != nil {
-	// 	log.Errorf("Error opening editor: %v", editorErr)
-	// }
+	}
 }
+
+// cmdErr := u.RunCommand([]string{"git", "clone", repoUrl})
+// if cmdErr != nil {
+// 	log.Errorf("Error cloning repo: %v", cmdErr)
+// }
+// cdErr := u.ChangeDir(repo.Name)
+// if cdErr != nil {
+// 	log.Errorf("Error changing directory: %v", cdErr)
+// }
+//
+// if config.Tmux {
+// 	if tmxErr := u.StartTmuxSession(repo.Name, editorCmd); tmxErr != nil {
+// 		log.Errorf("Error starting tmux session: %v", tmxErr)
+// 	}
+// }
+// if config.Editor == "vscode" {
+// 	cmd := []string{"code", "."}
+// 	if editorErr := u.RunCommand(cmd); editorErr != nil {
+// 		log.Errorf("Error opening editor: %v", editorErr)
+// 	}
+// }
+
+// the editor also needs to be passed in.
+// if the editor is NOT vim/nvim, just RunCommand([]string{"code", "."}) or whatever
+// if tmxErr := u.StartTmuxSession(repo.Name, editorCmd); tmxErr != nil { // config.Editor
+//
+//		log.Errorf("Error starting tmux session: %v", tmxErr)
+//	}
+//
+// editorErr := u.RunCommand([]string{config.Editor, "."})
+//
+//	if editorErr != nil {
+//		log.Errorf("Error opening editor: %v", editorErr)
+//	}

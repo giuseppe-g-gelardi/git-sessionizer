@@ -59,24 +59,16 @@ func StartTmuxSession(sessionName string, editorCmd string) error {
 	return nil
 }
 
-// nvimCmd := exec.Command("tmux", "send-keys", "-t", session, "nvim .", "C-m")
-// nvimCmd.Stdout = os.Stdout
-// nvimCmd.Stderr = os.Stderr
-
-// if err := nvimCmd.Run(); err != nil {
-// 	return fmt.Errorf("error sending keys to tmux: %v", err)
+// // maybe...
+// func run(command []string) (*exec.Cmd, error) {
+// 	cmd := exec.Command(command[0], command[1:]...)
+// 	cmd.Stdout = os.Stdout
+// 	cmd.Stderr = os.Stderr
+// 	cmd.Stdin = os.Stdin
+//
+// 	if err := cmd.Run(); err != nil {
+// 		return nil, fmt.Errorf("error running command %v: %v", command, err)
+// 	}
+//
+// 	return cmd, nil
 // }
-
-// maybe...
-func run(command []string) (*exec.Cmd, error) {
-	cmd := exec.Command(command[0], command[1:]...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	cmd.Stdin = os.Stdin
-
-	if err := cmd.Run(); err != nil {
-		return nil, fmt.Errorf("error running command %v: %v", command, err)
-	}
-
-	return cmd, nil
-}
