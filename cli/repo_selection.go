@@ -87,10 +87,16 @@ func RepoSelection(config *c.Config) {
 	// fmt.Printf("fmtStr: %v\n", fmtStr)
 
 	// tmuxErr := u.RunCommand([]string{"tmux", "new", "-S", repo.Name})
-	tmuxErr := u.RunCommand([]string{"tmux"})
-	if tmuxErr != nil {
-		log.Errorf("Error creating tmux session: %v", tmuxErr)
-	}
+	// tmuxErr := u.RunCommand([]string{"tmux"})
+	// if tmuxErr != nil {
+	// 	log.Errorf("Error creating tmux session: %v", tmuxErr)
+	// }
+
+    tnnErr := u.RunTmuxAndNvim(repo.Name)
+    if tnnErr != nil {
+        log.Errorf("Error running tmux and nvim: %v", tnnErr)
+    }
+
 
 	/*
 		perhaps the command to open the editor needs to be run in the same shell as the tmux sessions
