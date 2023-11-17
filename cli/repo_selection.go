@@ -5,6 +5,8 @@ import (
 
 	"github.com/giuseppe-g-gelardi/git-sessionizer/api"
 	p "github.com/giuseppe-g-gelardi/git-sessionizer/cli/prompts"
+	c "github.com/giuseppe-g-gelardi/git-sessionizer/config"
+	u "github.com/giuseppe-g-gelardi/git-sessionizer/util"
 
 	"github.com/briandowns/spinner"
 	"github.com/charmbracelet/log"
@@ -12,13 +14,33 @@ import (
 
 var API_URL = "https://api.github.com/user/repos?page={PAGE}&per_page={PER_PAGE}&visibility=all"
 
+func setEditorCommand(config *c.Config) string {
+	if config.Alias != "" {
+		return config.Alias
+	}
+	return config.Editor
+}
 
-func RepoSelection(token string) {
+func setRepoUrl(repo p.PartialRepo) string {
+
+	htmlorssh := p.HtmlOrSsh()
+
+	if htmlorssh == "ssh" {
+		return repo.Ssh_url
+	}
+	return repo.Http_url
+
+}
+
+func RepoSelection(config *c.Config) {
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond) // Build our new spinner])
 	s.Start()                                                    // Start the spinner
 	s.Suffix = " Fetching all repos..."
 	s.Color("cyan")
-	repos, err := api.RepoList(API_URL, token)
+
+	editorCmd := setEditorCommand(config)
+
+	repos, err := api.RepoList(API_URL, config.AccessToken)
 	if err != nil {
 		log.Errorf("Error: %v", err)
 	}
@@ -29,5 +51,33 @@ func RepoSelection(token string) {
 	for _, repo := range repos {
 		cliRepos = append(cliRepos, p.PartialRepo(repo))
 	}
-	p.RepoPrompt(cliRepos)
+	repo, _ := p.RepoPrompt(cliRepos) // this prompt returns the selected repo
+	repoUrl := setRepoUrl(repo)       // this returns the repo url
+
+	cmdErr := u.RunCommand([]string{"git", "clone", repoUrl})
+	if cmdErr != nil {
+		log.Errorf("Error cloning repo: %v", cmdErr)
+	}
+
+	startSession(repo, config, editorCmd)
+}
+
+func startSession(repo p.PartialRepo, config *c.Config, editorCmd string) {
+	cdErr := u.ChangeDir(repo.Name)
+	if cdErr != nil {
+		log.Errorf("Error changing directory: %v", cdErr)
+	}
+
+    // clean this upppppppppp
+	if config.Tmux {
+		if tmxErr := u.StartTmuxSession(repo.Name, editorCmd); tmxErr != nil {
+			log.Errorf("Error starting tmux session: %v", tmxErr)
+		}
+	}
+	if config.Editor == "vscode" {
+		cmd := []string{"code", "."}
+		if editorErr := u.RunCommand(cmd); editorErr != nil {
+			log.Errorf("Error opening editor: %v", editorErr)
+		}
+	}
 }

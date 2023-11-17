@@ -12,10 +12,11 @@ func InitCli(config *conf.Config, cm *conf.CfgManager) {
 	// display the welcome dialog options
 	welcome := p.WelcomeDialog()
 
+
 	// switch on the welcome dialog options:
 	switch welcome {
 	case "open": // open a repo,
-		RepoSelection(config.AccessToken)
+		RepoSelection(config)
 	case "update": // update the editor config,
 		ConfigureEditor(cm)
 	case "exit": // or exit the program

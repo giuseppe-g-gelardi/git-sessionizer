@@ -15,7 +15,7 @@ type PartialRepo struct {
 	Private     bool   `json:"private"`
 }
 
-func RepoPrompt(repos []PartialRepo) {
+func RepoPrompt(repos []PartialRepo) (PartialRepo, error) {
 	templates := &promptui.SelectTemplates{
 		Label:    "   {{ .Name | faint }}?",
 		Active:   "-> {{ .Name | blue }}",
@@ -51,9 +51,18 @@ func RepoPrompt(repos []PartialRepo) {
 
 	if err != nil {
 		fmt.Printf("Prompt failed %v\n", err)
-		return
+		// return _, errors.New("Prompt failed")
 	}
 
-	fmt.Printf("You chose repo %d: %s\n", i+1, repos[i].Name)
+	// fmt.Printf("You chose repo %d: %s\n", i+1, repos[i].Name)
+	//    fmt.Printf("http url: %s\n", repos[i].Http_url)
+	//    fmt.Printf("ssh url: %s\n", repos[i].Ssh_url)
+
+	// should probably return the whole *partial* repo object just incase the
+	// user wants to clone ssh OR html.
+	// - will probably just start with http implementation
+
 	// return // repos[i].Name
+
+	return repos[i], nil
 }

@@ -1,6 +1,6 @@
 module github.com/giuseppe-g-gelardi/git-sessionizer
 
-go 1.21.3
+go 1.20
 
 require (
 	github.com/briandowns/spinner v1.23.0
