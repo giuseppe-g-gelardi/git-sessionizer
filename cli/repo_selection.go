@@ -56,19 +56,6 @@ func RepoSelection(config *c.Config) {
 		repoUrl = repo.Ssh_url
 	}
 
-	/*
-			   list of commands: [
-		       clone: ["git", "clone", repoUrl],
-		       cdDir: ["cd", repo.Name],
-		       code: [config.Editor, "."],
-			   ]
-	*/
-
-	fmt.Printf("editorCmd %v\n", editorCmd)
-	fmt.Printf("config %v\n", config)
-
-	time.Sleep(10 * time.Second)
-
 	cmdErr := u.RunCommand([]string{"git", "clone", repoUrl})
 	if cmdErr != nil {
 		log.Errorf("Error cloning repo: %v", cmdErr)
@@ -78,19 +65,23 @@ func RepoSelection(config *c.Config) {
 		log.Errorf("Error changing directory: %v", cdErr)
 	}
 
-	/*
-	   if config.Editor == "vscode" || config.Tmux == false{
-	       editorErr := u.RunCommand([]string{config.Editor, "."})
-	   } else {
-	       tmxErr := u.StartTmuxSession(repo.Name, editorCmd)
-	   }
-	*/
+	if config.Tmux {
+		if tmxErr := u.StartTmuxSession(repo.Name, editorCmd); tmxErr != nil {
+			log.Errorf("Error starting tmux session: %v", tmxErr)
+		}
+	}
+	if config.Editor == "vscode" {
+        cmd := []string{"code", "."}
+		if editorErr := u.RunCommand(cmd); editorErr != nil {
+			log.Errorf("Error opening editor: %v", editorErr)
+		}
+	} 
 
 	// the editor also needs to be passed in.
 	// if the editor is NOT vim/nvim, just RunCommand([]string{"code", "."}) or whatever
-	if tmxErr := u.StartTmuxSession(repo.Name, editorCmd); tmxErr != nil { // config.Editor
-		log.Errorf("Error starting tmux session: %v", tmxErr)
-	}
+	// if tmxErr := u.StartTmuxSession(repo.Name, editorCmd); tmxErr != nil { // config.Editor
+	// 	log.Errorf("Error starting tmux session: %v", tmxErr)
+	// }
 	// editorErr := u.RunCommand([]string{config.Editor, "."})
 	// if editorErr != nil {
 	// 	log.Errorf("Error opening editor: %v", editorErr)
