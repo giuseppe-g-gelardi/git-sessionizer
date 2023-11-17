@@ -92,9 +92,14 @@ func RepoSelection(config *c.Config) {
 	// 	log.Errorf("Error creating tmux session: %v", tmuxErr)
 	// }
 
-    tnnErr := u.RunTmuxAndNvim(repo.Name)
-    if tnnErr != nil {
-        log.Errorf("Error running tmux and nvim: %v", tnnErr)
+    // tnnErr := u.RunTmuxAndNvim(repo.Name)
+    // if tnnErr != nil {
+    //     log.Errorf("Error running tmux and nvim: %v", tnnErr)
+    // }
+
+
+    if tmxErr := u.StartTmuxSession(repo.Name); tmxErr != nil {
+        log.Errorf("Error starting tmux session: %v", tmxErr)
     }
 
 
