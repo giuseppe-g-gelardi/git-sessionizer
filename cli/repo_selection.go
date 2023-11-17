@@ -13,6 +13,13 @@ import (
 	"github.com/charmbracelet/log"
 )
 
+func setEditorCommand(config *c.Config) string {
+	if config.Alias != "" {
+		return config.Alias
+	}
+	return config.Editor
+}
+
 var API_URL = "https://api.github.com/user/repos?page={PAGE}&per_page={PER_PAGE}&visibility=all"
 
 func RepoSelection(config *c.Config) {
@@ -22,6 +29,7 @@ func RepoSelection(config *c.Config) {
 	s.Color("cyan")
 
 	var repoUrl string
+	editorCmd := setEditorCommand(config)
 
 	repos, err := api.RepoList(API_URL, config.AccessToken)
 	if err != nil {
@@ -49,24 +57,6 @@ func RepoSelection(config *c.Config) {
 	}
 
 	/*
-			   clone repo (via https or ssh)
-			   cd into (repo.Name)
-
-		       compile and run list of commands {
-		           tmux, editor, alias, etc.
-		       }
-	*/
-
-	// // open editor logic:
-	/*
-	   var editorCmd string
-	   if config.Alias != "" {
-	       editorCmd = config.Alias
-	   }
-	   editorCmd = config.Editor
-	*/
-
-	/*
 			   list of commands: [
 		       clone: ["git", "clone", repoUrl],
 		       cdDir: ["cd", repo.Name],
@@ -74,8 +64,12 @@ func RepoSelection(config *c.Config) {
 			   ]
 	*/
 
+	fmt.Printf("editorCmd %v\n", editorCmd)
+	fmt.Printf("config %v\n", config)
+
+	time.Sleep(10 * time.Second)
+
 	cmdErr := u.RunCommand([]string{"git", "clone", repoUrl})
-	// cmdErr := u.RunCommand("git", "clone", string(repoUrl))
 	if cmdErr != nil {
 		log.Errorf("Error cloning repo: %v", cmdErr)
 	}
@@ -83,38 +77,22 @@ func RepoSelection(config *c.Config) {
 	if cdErr != nil {
 		log.Errorf("Error changing directory: %v", cdErr)
 	}
-	// fmtStr := u.StrFormat(repo.Name)
-	// fmt.Printf("fmtStr: %v\n", fmtStr)
-
-	// tmuxErr := u.RunCommand([]string{"tmux", "new", "-S", repo.Name})
-	// tmuxErr := u.RunCommand([]string{"tmux"})
-	// if tmuxErr != nil {
-	// 	log.Errorf("Error creating tmux session: %v", tmuxErr)
-	// }
-
-    // tnnErr := u.RunTmuxAndNvim(repo.Name)
-    // if tnnErr != nil {
-    //     log.Errorf("Error running tmux and nvim: %v", tnnErr)
-    // }
-
-
-    if tmxErr := u.StartTmuxSession(repo.Name); tmxErr != nil {
-        log.Errorf("Error starting tmux session: %v", tmxErr)
-    }
-
 
 	/*
-		perhaps the command to open the editor needs to be run in the same shell as the tmux sessions
-		take notes from the ts impl
+	   if config.Editor == "vscode" || config.Tmux == false{
+	       editorErr := u.RunCommand([]string{config.Editor, "."})
+	   } else {
+	       tmxErr := u.StartTmuxSession(repo.Name, editorCmd)
+	   }
 	*/
 
+	// the editor also needs to be passed in.
+	// if the editor is NOT vim/nvim, just RunCommand([]string{"code", "."}) or whatever
+	if tmxErr := u.StartTmuxSession(repo.Name, editorCmd); tmxErr != nil { // config.Editor
+		log.Errorf("Error starting tmux session: %v", tmxErr)
+	}
 	// editorErr := u.RunCommand([]string{config.Editor, "."})
 	// if editorErr != nil {
 	// 	log.Errorf("Error opening editor: %v", editorErr)
 	// }
-
-	/*
-	  THIS IS SO MUCH EASIER IN GO
-	*/
-
 }
