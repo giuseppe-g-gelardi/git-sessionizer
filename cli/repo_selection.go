@@ -32,6 +32,8 @@ func setRepoUrl(repo p.PartialRepo) string {
 
 }
 
+func bareRepo() {}
+
 func RepoSelection(config *c.Config) {
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond) // Build our new spinner])
 	s.Start()                                                    // Start the spinner
@@ -53,13 +55,29 @@ func RepoSelection(config *c.Config) {
 	}
 	repo, _ := p.RepoPrompt(cliRepos) // this prompt returns the selected repo
 	repoUrl := setRepoUrl(repo)       // this returns the repo url
+	isBareRepo := p.BareRepoPrompt()
 
-	cmdErr := u.RunCommand([]string{"git", "clone", repoUrl})
+	c := commandBuilder(repoUrl, isBareRepo)
+
+	// cmdErr := u.RunCommand([]string{"git", "clone", repoUrl})
+	cmdErr := u.RunCommand(c)
 	if cmdErr != nil {
 		log.Errorf("Error cloning repo: %v", cmdErr)
 	}
 
 	startSession(repo, config, editorCmd)
+}
+
+func commandBuilder(repoUrl string, isBareRepo bool) []string {
+	var cmd []string
+	// so janky
+	if isBareRepo {
+		cmd = []string{"git", "clone", "--bare", repoUrl}
+	} else {
+		cmd = []string{"git", "clone", repoUrl}
+	}
+
+	return cmd
 }
 
 func startSession(repo p.PartialRepo, config *c.Config, editorCmd string) {
@@ -68,7 +86,7 @@ func startSession(repo p.PartialRepo, config *c.Config, editorCmd string) {
 		log.Errorf("Error changing directory: %v", cdErr)
 	}
 
-    // clean this upppppppppp
+	// clean this upppppppppp
 	if config.Tmux {
 		if tmxErr := u.StartTmuxSession(repo.Name, editorCmd); tmxErr != nil {
 			log.Errorf("Error starting tmux session: %v", tmxErr)
