@@ -9,16 +9,16 @@ the application uses github authentication and some interactive prompts to...
  - lets you search through your public and private repositories
  - select and clone a repo 
  - - clone with SSH or HTTP
- - - - (soon) standard or bare (if you like worktrees) repository
+ - - - standard or bare (if you like worktrees) repository
  - cd into directory
  - start a tmux session, if that's your cup of tea
  - and finally, open the repo in your preferred editor (vscode, vim, or neovim)
  - - (soon) emacs and other stuff as well
 
 TODO: 
-- [ ] implement choice between standard or bare repo
+- [x] implement choice between standard or bare repo
 - [ ] additional editors
-- [ ] bubbletea? bubbletea!
+- [ ] bubbletea? bubbletea! (someone please help..... plz)
 
 ## To get started:
 1. `git clone https://github.com/giuseppe-g-gelardi/git-sessionizer.git`
