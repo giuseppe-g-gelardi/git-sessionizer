@@ -25,7 +25,4 @@ jobs:
       run: go mod download
 
     - name: Build
-      run: go build -o session -v ./cmd
-
-    # - name: Test
-    #   run: go test -v ./...
+      run: go build -v ./cmd/session
