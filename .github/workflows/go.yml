@@ -24,5 +24,15 @@ jobs:
     - name: Download dependencies
       run: go mod download
 
-    - name: Build
-      run: go build -v ./cmd/session
+    # - name: Build
+    #   run: go build -v ./cmd/session
+
+    - name: Build and Install
+      run: |
+        go install ./cmd/session
+        mv $GOPATH/bin/session /usr/local/bin/session
+
+    - name: Display Go version and installed binary path
+      run: |
+        go version
+        echo $GOPATH/bin/session
