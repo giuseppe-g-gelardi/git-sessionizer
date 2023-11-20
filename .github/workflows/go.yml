@@ -24,8 +24,8 @@ jobs:
     - name: Download dependencies
       run: go mod download
 
-    # - name: Build
-    #   run: go build -v ./cmd/session
+    - name: Build
+      run: go build -v ./cmd/session
 
     - name: Build and Install
       run: |
