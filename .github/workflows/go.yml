@@ -27,9 +27,9 @@ jobs:
     - name: Build
       run: go build -v ./cmd/session
 
-    - name: Build and Install
+    - name: Install
       run: |
-        go install ./cmd/session
+        go install -v -trimpath -ldflags="-s -w" ./cmd/session
         mv $GOPATH/bin/session /usr/local/bin/session
 
     - name: Display Go version and installed binary path
