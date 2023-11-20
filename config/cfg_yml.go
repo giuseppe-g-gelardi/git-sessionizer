@@ -30,7 +30,7 @@ type CfgManager struct {
 
 func NewCfgManager() *CfgManager {
 	return &CfgManager{
-		ConfigFileName: "config.yaml",
+		ConfigFileName: "session_config.yaml",
 		DefaultConfig: Config{
 			AccessToken: "",
 			Editor:      "vscode",

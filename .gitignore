@@ -22,3 +22,10 @@ go.work
 .deprecated
 config.yaml
 NOTES.md
+
+dist/
+
+# env file 
+.env
+.env.*
+!.env.example
