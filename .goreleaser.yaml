@@ -18,6 +18,9 @@ before:
 builds:
   - id: "{{ .ProjectName }}-{{ .Version }}"
     main: ./cmd/session/
+    flags: 
+      - -tags=main
+      - -v
     env:
       - CGO_ENABLED=0
     goos:

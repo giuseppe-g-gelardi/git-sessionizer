@@ -32,7 +32,7 @@ jobs:
           version: latest
           args: release --clean
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # secrets.GIT_SESSIONIZER_SECRET????
+          GITHUB_TOKEN: ${{ secrets.GIT_SESSIONIZER_SECRET }} # secrets.GIT_SESSIONIZER_SECRET????
           # Your GoReleaser Pro key, if you are using the 'goreleaser-pro'
           # distribution:
           # GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
