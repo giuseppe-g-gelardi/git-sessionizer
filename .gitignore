@@ -18,7 +18,6 @@
 # Go workspace file
 go.work
 
-.configrc
 .vscode
 .deprecated
 config.yaml
