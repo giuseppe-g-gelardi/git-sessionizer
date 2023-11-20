@@ -27,13 +27,13 @@ jobs:
     - name: Build
       run: go build -v ./cmd/session
 
-    - uses: goreleaser/goreleaser-action@v3
-      with:
-        args: "release --rm-dist"
-        version: latest
-        workdir: cmd/session
-      env: 
-        GITHUB_TOKEN: ${{ secrets.GIT_SESSIONIZER_SECRET }}
+    # - uses: goreleaser/goreleaser-action@v3
+    #   with:
+    #     args: "release --rm-dist"
+    #     version: latest
+    #     workdir: cmd/session
+    #   env: 
+    #     GITHUB_TOKEN: ${{ secrets.GIT_SESSIONIZER_SECRET }}
 
 
 
