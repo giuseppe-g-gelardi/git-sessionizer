@@ -32,8 +32,6 @@ func setRepoUrl(repo p.PartialRepo) string {
 
 }
 
-func bareRepo() {}
-
 func RepoSelection(config *c.Config) {
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond) // Build our new spinner])
 	s.Start()                                                    // Start the spinner

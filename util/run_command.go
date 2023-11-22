@@ -32,6 +32,12 @@ func StartTmuxSession(sessionName string, editorCmd string) error {
 	editorCmd = editorCmd + " ."
 	session := StrFormat(sessionName)
 
+	/*
+	   Check if tmux is already running
+	   if it is, attach to the session
+	   if not, start a new session
+	*/
+
 	// Start the tmux session
 	tmuxCmd := exec.Command("tmux", "new", "-s", string(session))
 	tmuxCmd.Stdout = os.Stdout
@@ -59,3 +65,11 @@ func StartTmuxSession(sessionName string, editorCmd string) error {
 	return nil
 }
 
+func IsTmuxActive() (bool, error) {
+	cmd := exec.Command("tmux", "info")
+	cmd.Stderr = cmd.Stdout
+
+	err := cmd.Run()
+
+	return err == nil, nil
+}
