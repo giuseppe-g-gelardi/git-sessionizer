@@ -2,19 +2,15 @@ package config
 
 import (
 	"errors"
+	"fmt"
 	"os"
+    "os/user"
+    "path/filepath"
+    "runtime"
 	"time"
 
 	"gopkg.in/yaml.v3"
 )
-
-// type EditorCfg string
-
-// const (
-// 	vsCode EditorCfg = "vscode"
-// 	vim    EditorCfg = "vim"
-// 	neovim EditorCfg = "nvim"
-// )
 
 type Config struct {
 	AccessToken string `json:"access_token" yaml:"access_token"`
@@ -24,13 +20,19 @@ type Config struct {
 }
 
 type CfgManager struct {
-	ConfigFileName string
-	DefaultConfig  Config
+	ConfigFileName     string
+	DefaultConfig      Config
 }
+
+/*
+   change the location of the config file.
+   - for linux and mac it is ~/.config/session_config.yaml
+   - for windows it is %APPDATA%\local\session_config.yaml ???
+*/
 
 func NewCfgManager() *CfgManager {
 	return &CfgManager{
-		ConfigFileName: "session_config.yaml",
+        ConfigFileName: getConfigFileLocation(), // ~/.config/session_config.yaml || %APPDATA%\local\session_config.yaml
 		DefaultConfig: Config{
 			AccessToken: "",
 			Editor:      "vscode",
@@ -38,6 +40,30 @@ func NewCfgManager() *CfgManager {
 			Tmux:        false,
 		},
 	}
+}
+
+func getConfigFileLocation() string {
+	var configDir string
+
+	// Get user's home directory
+	usr, err := user.Current()
+	if err != nil {
+		fmt.Println("Error getting user's home directory:", err)
+		return ""
+	}
+
+	// Determine config directory based on operating system
+	switch runtime.GOOS {
+	case "windows":
+		configDir = filepath.Join(os.Getenv("APPDATA"), "local")
+	case "linux", "darwin":
+		configDir = filepath.Join(usr.HomeDir, ".config")
+	default:
+		fmt.Println("Unsupported operating system")
+		return ""
+	}
+
+	return filepath.Join(configDir, "session_config.yaml")
 }
 
 func (cm *CfgManager) GetConfig(rcDepth int) (*Config, error) {
