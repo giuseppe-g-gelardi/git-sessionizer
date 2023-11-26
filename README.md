@@ -15,6 +15,8 @@ the application uses github authentication and some interactive prompts to...
 - and finally, open the repo in your preferred editor (vscode, vim, or neovim)
 - - (soon) emacs and other stuff as well
 
+![](./.github/screenshot.png)
+
 TODO:
 
 - [x] implement choice between standard or bare repo
