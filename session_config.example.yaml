@@ -1,0 +1,4 @@
+access_token: "" # github access token for repo rights
+editor: vscode # vscode | neovim | vim -- these are the current options
+alias: "" # whatever you want!
+tmux: false # ........

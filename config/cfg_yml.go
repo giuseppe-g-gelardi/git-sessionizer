@@ -4,10 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"os"
-    "os/user"
-    "path/filepath"
-    "runtime"
-	"time"
+	"os/user"
+	"path/filepath"
+	"runtime"
 
 	"gopkg.in/yaml.v3"
 )
@@ -20,19 +19,18 @@ type Config struct {
 }
 
 type CfgManager struct {
-	ConfigFileName     string
-	DefaultConfig      Config
+	ConfigFileName string
+	DefaultConfig  Config
 }
 
 /*
-   change the location of the config file.
    - for linux and mac it is ~/.config/session_config.yaml
    - for windows it is %APPDATA%\local\session_config.yaml ???
 */
 
 func NewCfgManager() *CfgManager {
 	return &CfgManager{
-        ConfigFileName: getConfigFileLocation(), // ~/.config/session_config.yaml || %APPDATA%\local\session_config.yaml
+		ConfigFileName: getConfigFileLocation(), // ~/.config/session_config.yaml || %APPDATA%\local\session_config.yaml
 		DefaultConfig: Config{
 			AccessToken: "",
 			Editor:      "vscode",
@@ -63,6 +61,7 @@ func getConfigFileLocation() string {
 		return ""
 	}
 
+	// still toying the with idea of creating a "git_sessionizer" directory
 	return filepath.Join(configDir, "session_config.yaml")
 }
 
@@ -108,14 +107,14 @@ func (cm *CfgManager) WriteConfig(params interface{}) (*Config, error) {
 	return cm.GetConfig(0)
 }
 
-func (cm *CfgManager) RevalidateConfig() error {
-	time.AfterFunc(2*time.Second, func() {
-		updatedConfig, err := cm.GetConfig(0)
-		if err != nil || updatedConfig.AccessToken == "" {
-			// Unable to update or verify config
-			cm.GetConfig(0)
-			return
-		}
-	})
-	return nil
-}
+// func (cm *CfgManager) RevalidateConfig() error {
+// 	time.AfterFunc(2*time.Second, func() {
+// 		updatedConfig, err := cm.GetConfig(0)
+// 		if err != nil || updatedConfig.AccessToken == "" {
+// 			// Unable to update or verify config
+// 			cm.GetConfig(0)
+// 			return
+// 		}
+// 	})
+// 	return nil
+// }
