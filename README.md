@@ -26,10 +26,12 @@ TODO:
 
 ## To get started:
 
-1. `git clone https://github.com/giuseppe-g-gelardi/git-sessionizer.git`
-2. cd git-sessionizer
-3. go mod tidy ...?
-4. go run ./cmd/session
+1. ```sh
+   $ git clone https://github.com/giuseppe-g-gelardi/git-sessionizer.git
+   ```
+3. cd git-sessionizer
+4. go mod tidy ...?
+5. go run ./cmd/session
 
 ## Install
 
