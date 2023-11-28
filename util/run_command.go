@@ -6,8 +6,6 @@ import (
 	"os/exec"
 	"strings"
 	"time"
-
-    // p "github.com/giuseppe-g-gelardi/git-sessionizer/cli/prompts"
 )
 
 func RunCommand(command []string) error {
@@ -31,22 +29,53 @@ func RunCommand(command []string) error {
 	return nil
 }
 
-func StartTmuxSession(sessionName string, editorCmd string) error {
+func AttachTmuxSession(sessionName, editorCmd string) error {
 	editorCmd = editorCmd + " ."
 	session := StrFormat(sessionName)
-    
 
-    // attach := p.AttachOrStartNewSession()
-    // sessions, _ := listTmuxSessions()
-    // session_select, _ := p.SessionPrompt(sessions)
+	tmuxCmd := exec.Command("tmux", "new-window", "-t", session)
+	tmuxCmd.Stdout = os.Stdout
+	tmuxCmd.Stderr = os.Stderr
+	tmuxCmd.Stdin = os.Stdin
 
+	// create the new tmux window
+	if err := tmuxCmd.Start(); err != nil {
+		return fmt.Errorf("error starting tmux: %v", err)
+	}
 
+	// get the list of windows in the selected tmux session
+	windows := exec.Command("tmux", "list-windows", "-t", session)
+	windows.Stderr = os.Stderr
+	out, err := windows.Output()
 
+	var window_names []string
 
-	/*
-	*/
+	if err != nil {
+		return err
+	}
 
-	// Start the tmux session
+	// iterate through the list of windows and get the window names
+	windows_list := strings.Split(string(out), "\n")
+	for _, window := range windows_list {
+		window_names = append(window_names, strings.Split(window, ":")[0])
+	}
+
+	// send keys to the last window in the list to open editor (new window seems to always be the last)
+	winErr := RunCommand([]string{"tmux", "send-keys", "-t", session + ":" + window_names[len(window_names)-1], editorCmd, "C-m"})
+	if winErr != nil {
+		return winErr
+	}
+
+	if err := tmuxCmd.Wait(); err != nil {
+		return fmt.Errorf("error waiting for tmux: %v", err)
+	}
+	return nil
+}
+
+func StartTmuxSession(sessionName, editorCmd string) error {
+	editorCmd = editorCmd + " ."
+	session := StrFormat(sessionName)
+
 	tmuxCmd := exec.Command("tmux", "new", "-s", string(session))
 	tmuxCmd.Stdout = os.Stdout
 	tmuxCmd.Stderr = os.Stderr
@@ -75,14 +104,14 @@ func StartTmuxSession(sessionName string, editorCmd string) error {
 
 func ListTmuxSessions() ([]string, error) {
 
-	active, err := isTmuxActive()
-	if err != nil {
-		return nil, err
-	}
-
-	if !active {
-		return nil, fmt.Errorf("tmux is not active")
-	}
+	// active, err := IsTmuxActive()
+	// if err != nil {
+	// 	return nil, err
+	// }
+	//
+	// if !active {
+	// 	return nil, fmt.Errorf("tmux is not active")
+	// }
 
 	cmd := exec.Command("tmux", "list-sessions")
 	cmd.Stderr = os.Stderr
@@ -102,9 +131,7 @@ func ListTmuxSessions() ([]string, error) {
 	return session_names, nil
 }
 
-
-
-func isTmuxActive() (bool, error) {
+func IsTmuxActive() (bool, error) {
 	cmd := exec.Command("tmux", "info")
 	cmd.Stderr = cmd.Stdout
 

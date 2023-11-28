@@ -54,20 +54,10 @@ func RepoSelection(config *c.Config) {
 	}
 	repo, _ := p.RepoPrompt(cliRepos) // this prompt returns the selected repo
 	repoUrl := setRepoUrl(repo)       // this returns the repo url
-	isBareRepo := p.BareRepoPrompt()
-	attach := p.AttachOrStartNewSession()
-
-
-	
-    sessions, _ := u.ListTmuxSessions()
-	session_select, _ := p.SessionPrompt(sessions)
-
-	fmt.Printf("session_select: %v\n", session_select)
-
-
-	fmt.Printf("attach: %v\n", attach)
+	isBareRepo := p.BareRepoPrompt()  // this prompt returns true if the user wants to clone a bare repo
 
 	c := commandBuilder(repoUrl, isBareRepo)
+	fmt.Printf("command: %v\n", c)
 
 	// cmdErr := u.RunCommand([]string{"git", "clone", repoUrl})
 	cmdErr := u.RunCommand(c)
@@ -75,7 +65,22 @@ func RepoSelection(config *c.Config) {
 		log.Errorf("Error cloning repo: %v", cmdErr)
 	}
 
-	startSession(repo, config, editorCmd)
+	active, _ := u.IsTmuxActive() // check if tmux is active
+
+	switch active {
+	case true:
+		active_sessions, _ := u.ListTmuxSessions()
+		session, _ := p.SessionPrompt(active_sessions)
+
+		cdErr := u.ChangeDir(repo.Name)
+		if cdErr != nil {
+			log.Errorf("Error changing directory: %v", cdErr)
+		}
+		u.AttachTmuxSession(session, editorCmd)
+	case false:
+		startSession(repo, config, editorCmd)
+	}
+
 }
 
 func commandBuilder(repoUrl string, isBareRepo bool) []string {
