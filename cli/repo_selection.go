@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/giuseppe-g-gelardi/git-sessionizer/api"
@@ -54,6 +55,17 @@ func RepoSelection(config *c.Config) {
 	repo, _ := p.RepoPrompt(cliRepos) // this prompt returns the selected repo
 	repoUrl := setRepoUrl(repo)       // this returns the repo url
 	isBareRepo := p.BareRepoPrompt()
+	attach := p.AttachOrStartNewSession()
+
+
+	
+    sessions, _ := u.ListTmuxSessions()
+	session_select, _ := p.SessionPrompt(sessions)
+
+	fmt.Printf("session_select: %v\n", session_select)
+
+
+	fmt.Printf("attach: %v\n", attach)
 
 	c := commandBuilder(repoUrl, isBareRepo)
 

@@ -58,11 +58,5 @@ func RepoPrompt(repos []PartialRepo) (PartialRepo, error) {
 	//    fmt.Printf("http url: %s\n", repos[i].Http_url)
 	//    fmt.Printf("ssh url: %s\n", repos[i].Ssh_url)
 
-	// should probably return the whole *partial* repo object just incase the
-	// user wants to clone ssh OR html.
-	// - will probably just start with http implementation
-
-	// return // repos[i].Name
-
 	return repos[i], nil
 }

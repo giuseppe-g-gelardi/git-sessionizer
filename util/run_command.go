@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 	"time"
+
+    // p "github.com/giuseppe-g-gelardi/git-sessionizer/cli/prompts"
 )
 
 func RunCommand(command []string) error {
@@ -31,11 +34,16 @@ func RunCommand(command []string) error {
 func StartTmuxSession(sessionName string, editorCmd string) error {
 	editorCmd = editorCmd + " ."
 	session := StrFormat(sessionName)
+    
+
+    // attach := p.AttachOrStartNewSession()
+    // sessions, _ := listTmuxSessions()
+    // session_select, _ := p.SessionPrompt(sessions)
+
+
+
 
 	/*
-	   Check if tmux is already running
-	   if it is, attach to the session
-	   if not, start a new session
 	*/
 
 	// Start the tmux session
@@ -65,7 +73,38 @@ func StartTmuxSession(sessionName string, editorCmd string) error {
 	return nil
 }
 
-func IsTmuxActive() (bool, error) {
+func ListTmuxSessions() ([]string, error) {
+
+	active, err := isTmuxActive()
+	if err != nil {
+		return nil, err
+	}
+
+	if !active {
+		return nil, fmt.Errorf("tmux is not active")
+	}
+
+	cmd := exec.Command("tmux", "list-sessions")
+	cmd.Stderr = os.Stderr
+	out, err := cmd.Output()
+
+	var session_names []string
+
+	if err != nil {
+		return nil, err
+	}
+
+	sessions := strings.Split(string(out), "\n")
+	for _, session := range sessions {
+		session_names = append(session_names, strings.Split(session, ":")[0])
+	}
+
+	return session_names, nil
+}
+
+
+
+func isTmuxActive() (bool, error) {
 	cmd := exec.Command("tmux", "info")
 	cmd.Stderr = cmd.Stdout
 

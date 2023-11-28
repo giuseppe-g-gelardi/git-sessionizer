@@ -29,3 +29,22 @@ func ConfigureTmuxOptions() bool {
 
 	return templates.RenderSelect("Confirm Tmux Options", tmuxOptions, 4).(bool)
 }
+
+func AttachOrStartNewSession() bool {
+    var desc = "Would you like to attach to an existing tmux session or start a new one?"
+    
+    sessionOptions := []templates.DialogOption{
+        {
+            Name:        "YES - Attach to existing session",
+            Value:       true,
+            Description: desc,
+        },
+        {
+            Name:        "NO - Start a new session",
+            Value:       false,
+            Description: desc,
+        },
+    }
+
+    return templates.RenderSelect("Attach or Start New Session", sessionOptions, 4).(bool)
+}
